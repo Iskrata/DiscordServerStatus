@@ -1,0 +1,25 @@
+{
+  "name": "minecraft-status-changer",
+  "version": "1.0.0",
+  "description": "Adding the possibility to hava real time minecraft server stats in discord.",
+  "main": "status-changer.js",
+  "scripts": {
+    "test": "node status-changer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "Iskren",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.0.2",
+    "jshint": "^2.11.1",
+    "jsonfile": "^5.0.0",
+    "node-fetch": "^2.6.0"
+  }
+}

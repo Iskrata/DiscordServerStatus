@@ -45,9 +45,33 @@ function updateStatus(channel){
     }
 }
 
+
+client.on('message', message =>{
+	if(message.guild){
+		if(message.content[0]==="!"){
+			var messageL=message.content.toLowerCase()
+			if (messageL === "!list") {
+                message.reply();
+                message.channel.send("↓ online players ↓");
+                fetch(url, settings)
+                    .then(res => res.json())
+                    .then((json) => {
+                        for (i in json.players.sample) {
+                            message.channel.send(json.players.sample[i].name);
+                          }
+                        
+                });
+			}
+		}
+	}
+})
+
 setInterval(() => {
     client.channels.fetch("727253148498132995")
         .then(channel => { 
             updateStatus(channel);
         });  
 }, 60000); // Runs this every 60 seconds.
+
+
+//channels.json

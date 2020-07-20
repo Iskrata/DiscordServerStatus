@@ -133,17 +133,21 @@ client.on('message', message =>{
                 console.log('help command decteted');
             }else if(messageL === "/status") {
                 console.log('status command detected');
-            }else if(messageL === "/forcerefresh" || messageL === "/ff") {
-                if (channels.online != "" && channels.ip != ""){
-                    updateStatus();
-                    message.reply('Succesfully ForceRefreshed the status!')
+            }else if(messageL === "/forcerefresh" || messageL === "/fr") {
+                if(message.member.hasPermission("MANAGE_CHANNELS")){
+                    if (channels.online != "" && channels.ip != ""){
+                        updateStatus();
+                        message.reply('Succesfully ForceRefreshed the status!')
+                    }else{
+                        message.reply('You need to configure the ip and the online channel first!')
+                    }
                 }else{
-                    message.reply('You need to configure the ip and the online channel first!')
+                    message.reply("I need `manage_channels` permission to do this.")
                 }
             }
 		}
 	}
-})
+})  
 
 
 
@@ -152,7 +156,7 @@ setInterval(() => {
     if (channels.online != "" && channels.ip != ""){
         updateStatus()
     }
-}, 10000); // Runs this every 10 seconds.
+}, 60000 * 5); // Runs this every 5 mins.
 
 //ip -  bibaland.mymcserver.org
 //online channel id -  727253148498132995

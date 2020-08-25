@@ -43,7 +43,7 @@ const helpEmbed = {
             },
             {
                 "name": "Commands",
-                "value": "**/ip {your ip}**  -  Sets the Ip for the server you want to get status from\n\n**/setonline**  -  The command should be used while connected to a voice channel. When used the voice channel you were connected to will be used to display the current players in the Minecraft server\n\n**/status**  -  Displays the basic stats of the Minecraft server\n\n**/forcerefresh or /fr**  -  Force refreshes the status of the server (by default it is refreshing in every 5 minutes)\n\n**/help**  -  Displays the 4th dimension (depends on the current universe) \n\n",
+                "value": "**/ip {your ip}**  -  Sets the Ip for the server you want to get status from\n\n**/setonline**  -  The command should be used while connected to a voice channel. When used the voice channel you are connected to will be used to display the current players in the Minecraft server\n\n**/status**  -  Displays the basic stats of the Minecraft server\n\n**/forcerefresh or /fr**  -  Force refreshes the status of the server (by default it is refreshing in every 5 minutes)\n\n**/help**  -  Displays the 4th dimension (depends on the current universe) \n\n",
                 "inline": false
             }
         ]

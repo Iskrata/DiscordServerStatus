@@ -6,6 +6,8 @@ Discord Bot that displays the status of a Minecraft server using a channel name.
 
 ![Demonstration](https://github.com/Iskrata/DiscordServerStatus/blob/master/data/images/Screenshot_1.png)
 
+![Demonstration](https://github.com/Iskrata/DiscordServerStatus/blob/master/data/images/Screenshot_2.png)
+
 ## Commands
 `/ip {ip}`  Sets the Ip for the server you want to get status from
 

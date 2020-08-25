@@ -1,1 +1,1 @@
-exports.bot_token = "NzE1MTI3MzYxOTk3MzczNTEw.XxWMhA.fdeTRnMwYBeLYsHuVZKqum1ueJI"
+exports.bot_token = "Your token"

@@ -6,8 +6,6 @@ Discord Bot that displays the status of a Minecraft server using a channel name.
 
 ![Demonstration](https://github.com/Iskrata/DiscordServerStatus/blob/master/data/images/Screenshot_1.png)
 
-![Demonstration](https://github.com/Iskrata/DiscordServerStatus/blob/master/data/images/Screenshot_2.png)
-
 ## Commands
 `/ip {ip}`  Sets the Ip for the server you want to get status from
 
@@ -19,6 +17,8 @@ Discord Bot that displays the status of a Minecraft server using a channel name.
 `/forcerefresh or /fr`  Force refreshes the status of the server (by default it is refreshing in every 5 minutes)
 
 `/help` Displays the 4th dimension (depends on the current universe)
+
+![Demonstration](https://github.com/Iskrata/DiscordServerStatus/blob/master/data/images/Screenshot_2.png)
 
 ## Usage
 (Note: You and the bot need Manage Channels permission)

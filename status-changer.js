@@ -1,18 +1,55 @@
 const Discord = require('discord.js');
+const { Attachment } = require('discord.js');
 const jsonfile = require('jsonfile');
 const tokens = require('./tokens.js');
-var channels=require("./channels.json");
+const fetch = require('node-fetch');
+const request = require('request');
+var md5 = require('js-md5');
+var channels = require("./channels.json");
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const client = new Discord.Client({
 	messageCacheMaxSize:1
 });
 
-const fetch = require('node-fetch');
+// ip of the aws server:
+//const hostURL = 'http://3.132.172.78'
+// the domain using the aws nameservers:
+const hostURL = 'http://iskrensserver.tk'
+const requestInterval = 60000 * 5 // Runs every 5 minutes
+
 //not working very well
 //let url = "https://api.mcsrvstat.us/2/bibaland.mymcserver.org";
-var url = "https://api.minetools.eu/ping/" + channels.ip
+var url = `https://api.minetools.eu/ping/${channels.ip}` 
 let settings = { method: "Get" };
 var changes=false;
+
+const helpEmbed = {
+    "embed": {
+        "description": "MineStatus is a Discord Bot that displays the status of a Minecraft server using a channel name.",
+        "color": 560438,
+        "footer": {
+            "text": "MineStatus by Iskrata#4736"
+        },
+        "author": {
+            "name": "MineStatus",
+            "icon_url": "https://i.imgur.com/RgcBBDD.png"
+        },
+        "fields": [
+            {
+                "name": "**Basic setup**",
+                "value": "First, you need to run /ip {your ip} to set the server you want to get the status from. Then use /setonline while in a channel to set the channel you are to be used for displaying the current online players in the Minecraft server.",
+                "inline": false
+            },
+            {
+                "name": "Commands",
+                "value": "**/ip {your ip}**  -  Sets the Ip for the server you want to get status from\n\n**/setonline**  -  The command should be used while connected to a voice channel. When used the voice channel you were connected to will be used to display the current players in the Minecraft server\n\n**/status**  -  Displays the basic stats of the Minecraft server\n\n**/forcerefresh or /fr**  -  Force refreshes the status of the server (by default it is refreshing in every 5 minutes)\n\n**/help**  -  Displays the 4th dimension (depends on the current universe) \n\n",
+                "inline": false
+            }
+        ]
+    }
+}
+
 
 client.on('ready', () => {
 	console.log('Logged in as ' + client.user.username);
@@ -47,15 +84,25 @@ function save(){
 	console.log("Autosave Complete");
 }
 
+function imageExists(image_url){
+
+    var http = new XMLHttpRequest();
+
+    http.open('HEAD', image_url, false);
+    http.send();
+
+    return http.status != 404;
+
+}
 
 function updateStatus(){
     url = "https://api.minetools.eu/ping/" + channels.ip;
     if(channels.online){
-        client.channels.fetch(channels.online)
+        return client.channels.fetch(channels.online)
         .then(channel => { 
             if(channel){
                 if(channel.manageable){
-                    fetch(url, settings)
+                    return fetch(url, settings)
                         .then(res => res.json())
                         .then((json) => {
                             var newTitle = 'Online: ' + json.players.online;
@@ -65,6 +112,14 @@ function updateStatus(){
                             }else{
                                 console.log('The name is not chnaged: ' + newTitle);
                             }
+                            var players = [];
+                            for (i in json.players.sample) {
+                                players.push(i);
+                            }
+                            if (players == []){
+                                players = "N/A";
+                            }
+                            return ["online",json.players.online,"N/A",json.version.name,json.favicon];
                     });
                 }
             }
@@ -130,9 +185,61 @@ client.on('message', message =>{
                     message.reply("No server IP found. Try adding it with /ip {yourip}")
                 }
 			}else if(messageL === "/help") {
+                message.channel.send(helpEmbed);
                 console.log('help command decteted');
             }else if(messageL === "/status") {
-                console.log('status command detected');
+                    updateStatus().then(l => {
+                        //console.log(l);
+                        let commaPos = l[4].search(",");
+                        let base64Data = l[4].substring(commaPos+1);
+                        let hash = md5(base64Data);
+                        console.log(`${hostURL}/${hash}.png`);
+                        if (!imageExists(`${hostURL}/${hash}.png`)){
+                            request.post(hostURL, {
+                                form: {
+                                    image: l[4]
+                                }
+                            })
+                        }
+                        
+                        const statusEmbed = {
+                            "embed": {
+                                "title": "Server Status",
+                                "color": 560438,
+                                "footer": {
+                                    "text": "Have fun!"
+                                },
+                                "thumbnail": {
+                                    "url": `${hostURL}/${hash}.png`
+                                    //"url": "https://i.imgur.com/el87PX3.png"
+                                },
+                                "fields": [
+                                    {
+                                        "name": "Status",
+                                        "value": l[0],
+                                        "inline": true
+                                    },
+                                    {
+                                        "name": "Player Count",
+                                        "value": l[1],
+                                        "inline": true
+                                    },
+                                    {
+                                        "name": "Players",
+                                        "value": l[2],
+                                        "inline": true
+                                    },
+                                    {
+                                        "name": "Version",
+                                        "value": l[3],
+                                        "inline": true
+                                    }
+                                ]
+                            }
+                        }
+                        message.channel.send(statusEmbed);
+                        console.log('status command detected');
+                    })  
             }else if(messageL === "/forcerefresh" || messageL === "/fr") {
                 if(message.member.hasPermission("MANAGE_CHANNELS")){
                     if (channels.online != "" && channels.ip != ""){
@@ -156,8 +263,11 @@ setInterval(() => {
     if (channels.online != "" && channels.ip != ""){
         updateStatus()
     }
-}, 60000 * 5); // Runs this every 5 mins.
+}, requestInterval); 
 
 //ip -  bibaland.mymcserver.org
 //online channel id -  727253148498132995
 
+//TODO: Replace LIST functions to STATUS comamnd
+
+// Set a vote option (in help) afte the relase of the bot (https://top.gg/)

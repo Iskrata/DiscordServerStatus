@@ -21,7 +21,7 @@
     "js-md5": "^0.7.3",
     "jshint": "^2.11.1",
     "jsonfile": "^5.0.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "request": "^2.88.2",
     "xmlhttprequest": "^1.8.0"
   }

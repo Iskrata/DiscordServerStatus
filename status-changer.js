@@ -105,6 +105,7 @@ function updateStatus(){
                     return fetch(url, settings)
                         .then(res => res.json())
                         .then((json) => {
+                            //console.log(json);
                             var newTitle = 'Online: ' + json.players.online;
                             if(channel.name!==newTitle){
                                 console.log('Changed name to: ' + newTitle);
@@ -136,12 +137,14 @@ client.on('message', message =>{
                 if(message.member.hasPermission("MANAGE_CHANNELS")) {
                     var newip = message.content.substr(4).trim();   
                     if (newip.length < 100){
+                        let guildid = message.guild.id.toString()
+                        //console.log(guildid);
                         channels["ip"] = newip;
-                        url = "https://api.minetools.eu/ping/" + channels.ip
+                        //url = "https://api.minetools.eu/ping/" + channels.guildid.ip
                         message.reply("Succesfully changed the ip to `" + newip + '`');
-                        if (channels.online != "" && channels.ip != ""){
-                            updateStatus()
-                        }
+                       // if (channels.guildid.online != "" && channels.guildid.ip != ""){
+                         //   updateStatus()
+                       // }
                         autosave();
                     }else{
                         message.reply("The IP must be less than 100 characters long.")
@@ -260,9 +263,9 @@ client.on('message', message =>{
 
 
 setInterval(() => {
-    if (channels.online != "" && channels.ip != ""){
-        updateStatus()
-    }
+    // if (channels.online != "" && channels.ip != ""){
+    //     updateStatus()
+    // }
 }, requestInterval); 
 
 //ip -  bibaland.mymcserver.org
